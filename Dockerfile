@@ -9,6 +9,6 @@ RUN make build
 FROM alpine
 
 WORKDIR /app
-COPY --from=builder /orders/bin .
+COPY --from=builder /newsreader/bin .
 
-ENTRYPOINT ["./cmd"]
+ENTRYPOINT ["./newsreader"]

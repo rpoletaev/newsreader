@@ -3,6 +3,7 @@ module github.com/rpoletaev/newsreader
 go 1.13
 
 require (
+	github.com/PuerkitoBio/goquery v1.5.1
 	github.com/golang/mock v1.4.3
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/pkg/errors v0.9.1

@@ -1,6 +1,20 @@
 package internal
 
-import "time"
+import (
+	"io"
+	"time"
+)
+
+type FeedType string
+
+type FeedSubtype string
+
+const (
+	FeedTypeHTML FeedType = "html"
+	FeedTypeXML  FeedType = "xml"
+
+	FeedSubtypeAtom FeedSubtype = "atom"
+)
 
 // Store allows interact with DB
 type Store interface {
@@ -9,11 +23,38 @@ type Store interface {
 	Articles() ArticlesRepository
 }
 
+// type FeedParser struct {
+// 	Articles(io.Reader, Rule) []Article
+// }
+
+type Rule interface {
+	Container(io.Reader) (Container, error)
+	ArticleRule
+}
+
+type Container interface {
+	Articles() ([]*Article, error)
+}
+
+type ArticleRuleBuilder interface {
+	Get() func() ArticleRule
+}
+type ArticleRule interface {
+	FeedID() string
+	SourceID() string
+	Caption() string
+	Href() string
+	MainContent() string
+	PubDate() *time.Time
+}
+
 // Feed represents a source of articles
 type Feed struct {
 	ID        uint
 	Address   string
 	Rule      string
+	Type      FeedType
+	Subtype   FeedSubtype
 	CreatedAt *time.Time `db:"created_at"`
 	UpdatedAt *time.Time `db:"updated_at"`
 	DeletedAt *time.Time `db:"deleted_at"`
